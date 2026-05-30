@@ -4,11 +4,12 @@ use App\Enums\StatusEnum;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CheckUserIsActiveMiddleware;
 use App\Http\Middleware\SetUpLanguageMiddleware;
+use ErlandMuchasaj\LaravelGzip\Middleware\GzipEncodeResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::middleware([SetUpLanguageMiddleware::class, 'throttle:web'])->group(function (): void {
+Route::middleware([SetUpLanguageMiddleware::class, GzipEncodeResponse::class, 'throttle:web'])->group(function (): void {
     Route::get('/go-back', fn() => Auth::check() ? to_route('dashboard.home') : to_route('login'))->name('go_back');
     Route::get('/change-language/{lang}', function ($lang): Illuminate\Http\RedirectResponse {
         session()->put(
