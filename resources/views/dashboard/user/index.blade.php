@@ -70,8 +70,7 @@
                                     <div
                                         class="inline-flex items-center justify-center shrink-0 border border-neutral-200 rounded-lg p-1.5 dark:border-neutral-700 ">
                                         <x-wireui-toggle md :left-label="$user->status->getLabel()" :checked="$user->status === StatusEnum::Active"
-                                            wire:click="toggleStatus({{ $user->id }})"
-                                            wire:confirm="{{ __('messages.confirm_toggle_status', ['attr' => $user->name]) }}" />
+                                            x-on:click="$wire.toggleStatus({{ $user->id }})" />
                                     </div>
                                     @if ($type === 'admin')
                                         <div>

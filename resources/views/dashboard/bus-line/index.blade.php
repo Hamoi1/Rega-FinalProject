@@ -124,8 +124,7 @@
                                     <div
                                         class="inline-flex items-center justify-center shrink-0 border border-neutral-200 rounded-lg p-1.5 dark:border-neutral-700 ">
                                         <x-wireui-toggle md :left-label="$busLine->status->getLabel()" :checked="$busLine->status === StatusEnum::Active"
-                                            wire:click="toggleStatus({{ $busLine->id }})"
-                                            wire:confirm="{{ __('messages.confirm_toggle_status', ['attr' => ($busLine->from_location_name ?? '') . ' → ' . ($busLine->to_location_name ?? '')]) }}" />
+                                            x-on:click="$wire.toggleStatus({{ $busLine->id }})" />
                                     </div>
                                     <div>
                                         <x-wireui-button
