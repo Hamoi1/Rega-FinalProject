@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Noto+Naskh+Arabic:wght@400;600;700&family=Roboto:ital,wdth,wght@0,75..100,100..900;1,75..100,100..900&display=swap');
+@import 'tailwindcss';
+@import './theme.css';
+@import "../../node_modules/preline/variants.css";
+@import '../../vendor/wireui/wireui/ts/global.css';
+
+@font-face {
+    font-family: 'Rabar_021';
+    src: url('../../public/assets/fonts/Rabar_021.ttf') format('truetype');
+}
+
+/* PLUGINS */
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+@plugin "flowbite/plugin";
+
+/* VIEWS */
+@source '../views';
+@source '../js/**/*.js';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/wireui/wireui';
+@source "../../node_modules/preline/dist/*.js";
+
+/* Custom Variants */
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant aria-current (&[aria-current="page"]);
+@custom-variant child (& > *);
+@custom-variant child-hover (& > *:hover);
+@custom-variant child-focus (& > *:focus);
+@custom-variant child-not-first (& > *:not(:first-child));
+@custom-variant child-first (& > *:first-child);
+@custom-variant child-last (& > *:last-child);
+@custom-variant child-not-last (& > *:not(:last-child));
+@custom-variant child-even (& > *:nth-child(even));
+@custom-variant child-odd (& > *:nth-child(odd));
+
+/* Theme Variables */
+@theme {
+    --default-font-family:
+        'Vazirmatn', 'IBM Plex Sans Arabic', 'Noto Naskh Arabic', 'KurdishBold', 'Roboto', 'Instrument Sans',
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji",
+        ui-sans-serif,
+        system-ui,
+        sans-serif;
+    --default-font-feature-settings: normal;
+    --default-font-variation-settings: normal;
+
+
+    /* 455px */
+    --breakpoint-xs: 28.4375rem;
+    /* 640px */
+    --breakpoint-sm: 40rem;
+    /* 768px */
+    --breakpoint-md: 48rem;
+    /* 1024px */
+    --breakpoint-lg: 64rem;
+    /* 1280px */
+    --breakpoint-xl: 80rem;
+    /* 1536px */
+    --breakpoint-2xl: 96rem;
+    /* 1920px */
+    --breakpoint-3xl: 120rem;
+
+    --color-gray-50: var(--color-zinc-50);
+    --color-gray-100: var(--color-zinc-100);
+    --color-gray-200: var(--color-zinc-200);
+    --color-gray-300: var(--color-zinc-300);
+    --color-gray-400: var(--color-zinc-400);
+    --color-gray-500: var(--color-zinc-500);
+    --color-gray-600: var(--color-zinc-600);
+    --color-gray-700: var(--color-zinc-700);
+    --color-gray-800: var(--color-zinc-800);
+    --color-gray-900: var(--color-zinc-900);
+    --color-gray-950: var(--color-zinc-950);
+
+    /* Secondary Colors (using zinc) */
+    --color-secondary-50: var(--color-zinc-50);
+    --color-secondary-100: var(--color-zinc-100);
+    --color-secondary-200: var(--color-zinc-200);
+    --color-secondary-300: var(--color-zinc-300);
+    --color-secondary-400: var(--color-zinc-400);
+    --color-secondary-500: var(--color-zinc-500);
+    --color-secondary-600: var(--color-zinc-600);
+    --color-secondary-700: var(--color-zinc-700);
+    --color-secondary-800: var(--color-zinc-900);
+    --color-secondary-900: var(--color-zinc-900);
+    --color-secondary-950: var(--color-zinc-950);
+
+    --color-dark-100: var(--color-zinc-100);
+    --color-dark-200: var(--color-zinc-200);
+    --color-dark-300: var(--color-zinc-300);
+    --color-dark-400: var(--color-zinc-400);
+    --color-dark-500: var(--color-zinc-500);
+    --color-dark-600: var(--color-zinc-600);
+    --color-dark-700: var(--color-zinc-700);
+    --color-dark-800: var(--color-zinc-800);
+    --color-dark-900: var(--color-zinc-900);
+
+    /* wire ui  */
+    --color-background-dark: var(--color-zinc-800);
+
+    --animate-spin-slow: spin 1.5s linear infinite;
+    --animate-blob: blob 7s infinite;
+}
+
+/* Keyframes */
+@keyframes blob {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* Base Styles */
+*:focus {
+    outline: 0 !important;
+    outline-offset: 0 !important;
+    background-image: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+
+html {
+    scroll-behavior: smooth !important;
+    font-family: var(--default-font-family) !important;
+    font-feature-settings: var(--default-font-feature-settings) !important;
+    font-variation-settings: var(--default-font-variation-settings) !important;
+    font-size: clamp(1rem, 1.35rem + 0.5vw, 1.1rem) !important;
+}
+
+html::-webkit-scrollbar {
+    height: 0px !important;
+    width: 3px !important;
+}
+
+html::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: #52525b !important;
+    border-radius: 10px !important;
+}
+
+.custome-scrollbar::-webkit-scrollbar {
+    height: 4px;
+}
+
+.custome-scrollbar::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+.custome-scrollbar::-webkit-scrollbar-thumb {
+    background: black;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.no-tailwind {
+    all: unset !important;
+}
+
+.dir-rtl {
+    direction: rtl !important;
+}
+
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+    cursor: pointer;
+}
+
+.dir-ltr {
+    direction: ltr !important;
+}
+
+.dir-rtl>input[placeholder],
+.dir-rtl>textarea[placeholder] {
+    @apply text-right;
+}
+
+.heading-permalink {
+    @apply inline-block mr-2 no-underline;
+}
+
+.table-of-contents {
+    @apply bg-zinc-100 dark:bg-zinc-800 py-4 ps-10 rounded-lg my-2;
+}
+
+.page-plus-class {
+    @apply inline-flex items-center justify-center gap-2 p-2 lg:px-4 rounded-full lg:rounded-lg bg-white dark:bg-zinc-900 text-black dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 shadow border border-zinc-200 dark:border-zinc-700/50 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300;
+}
+
+.custom-table {
+    @apply border-collapse w-full table-auto rounded-xl overflow-hidden whitespace-nowrap;
+}
+
+.custom-table thead tr {
+    @apply ltr:text-left rtl:text-right bg-zinc-50 dark:bg-zinc-900 tracking-wide;
+}
+
+.custom-table thead tr th {
+    @apply py-3 px-3 text-xs md:text-sm font-semibold tracking-wide border-none text-zinc-700 dark:text-zinc-100;
+}
+
+.custom-table tbody tr {
+    @apply bg-white dark:bg-zinc-950/60 hover:bg-zinc-200/30 dark:hover:bg-zinc-800/60 transition duration-200 ease-in-out;
+}
+
+.custom-table tbody tr:nth-child(even) {
+    @apply bg-zinc-100/30 dark:bg-zinc-900/20 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60;
+}
+
+.custom-table tbody tr td {
+    @apply p-3 px-4 text-sm text-zinc-800 dark:text-zinc-200 align-middle;
+}
+
+.custom-table tbody tr:not(:last-child) td {
+    @apply border-b border-zinc-200/80 dark:border-zinc-800/70;
+}
+
+.custom-table tfoot {
+    @apply bg-zinc-950 text-white border-t border-zinc-700;
+}
+
+.custom-table tfoot tr {
+    @apply bg-zinc-950 text-white border-t border-zinc-700;
+}
+
+.form-checkbox {
+    @apply size-5 rounded-lg text-xl;
+}
+
+.dark [placeholder] {
+    @apply dark:placeholder-zinc-300;
+}
+
+.mt-2.text-sm.text-negative-600 {
+    @apply capitalize;
+}
+
+.filepond--credits {
+    @apply hidden;
+}
+
+.filepond--root {
+    /* @apply dark:bg-zinc-800 rounded-lg; */
+    @apply bg-transparent dark:bg-background-dark rounded-lg;
+}
+
+.filepond--drop-label label {
+    @apply text-black dark:text-white;
+}
+
+.filepond--drop-label {
+    @apply bg-transparent rounded;
+}
+
+.filepond--panel.filepond--panel-root {
+    @apply bg-transparent rounded-lg;
+}
+
+.filepond--panel-root.filepond--panel-center {
+    @apply bg-transparent rounded-lg;
+}
+
+.filepond--panel-root.filepond--panel-bottom,
+.filepond--panel-root.filepond--panel-top {
+    @apply hidden;
+}
+
+.z-max {
+    z-index: 9999 !important;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield !important;
+    appearance: textfield !important
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    display: none !important;
+}
+
+[x-cloak] {
+    @apply hidden;
+}
+
+.image-zoom-container .image-zoom {
+    transition: transform 0.25s ease-in-out !important;
+    transform: scale(var(--scale, 1)) !important;
+    transform-origin: var(--x) var(--y) !important;
+}
+
+.assign-permission-to-role-checkbox span {
+    @apply mx-2 mt-1;
+}
+
+/* table report style */
+.table-report-style {
+    @apply w-full border-collapse bg-white text-black;
+}
+
+.table-report-style thead {
+    @apply bg-zinc-50 text-zinc-800;
+}
+
+.table-report-style thead tr th {
+    @apply px-4 py-3 text-left text-xs font-medium text-zinc-700 uppercase tracking-wider border-b border-zinc-200;
+}
+
+.table-report-style tbody {
+    @apply bg-white divide-y divide-zinc-200;
+}
+
+.table-report-style tbody tr {
+    @apply hover:bg-zinc-50 print:hover:bg-transparent transition-colors duration-150;
+}
+
+.table-report-style tbody tr td {
+    @apply px-4 py-4 text-sm text-zinc-900;
+}
+
+/* Media query for dark mode */
+@media (prefers-color-scheme: dark) {
+    .dark .apexcharts-text {
+        fill: #fff !important;
+    }
+
+    .dark .apexcharts-legend-text,
+    .dark .apexcharts-title-text {
+        color: #fff !important;
+    }
+}
+
+
+/* wire ui custom styles */
+[x-ref="container"] {
+    @apply border border-zinc-200 dark:border-zinc-700 rounded-md focus-within:ring-primary-600 dark:focus-within:ring-zinc-600 shadow-xs bg-background-white dark:bg-background-dark relative flex justify-between gap-x-2 items-center transition-all ease-in-out duration-150 ring-1 ring-zinc-200 dark:ring-zinc-700 focus-within:ring-2 invalidated:bg-negative-50 invalidated:ring-negative-500 dark:invalidated:ring-negative-700 dark:invalidated:bg-negative-700/10 dark:invalidated:ring-negative-600;
+}
+
+[x-ref="container"] {
+    &>button[type="button"] {
+        @apply rtl:pr-6;
+    }
+}
+
+html[dir="rtl"] [type="password"] {
+    @apply pr-3;
+}
+
+[x-bind\:value="display"] {
+    @apply rtl:pr-6;
+}
+
+/* Custom styling for all elements with name ending in "container" */
+[name$="container"] {
+    @apply border border-zinc-200 dark:border-zinc-700 rounded-md focus-within:ring-primary-600 dark:focus-within:ring-zinc-600 shadow-xs bg-background-white dark:bg-background-dark relative flex justify-between gap-x-2 items-center transition-all ease-in-out duration-150 ring-1 ring-zinc-200 dark:ring-zinc-700 focus-within:ring-2 invalidated:bg-negative-50 invalidated:ring-negative-500 dark:invalidated:ring-negative-700 dark:invalidated:bg-negative-700/10 dark:invalidated:ring-negative-600;
+}
+
+/* Custom styling for all elements with name ending in "container" */
+[name$="container"] {
+    @apply border border-zinc-200 dark:border-zinc-700 rounded-md focus-within:ring-primary-600 dark:focus-within:ring-zinc-600 shadow-xs bg-background-white dark:bg-background-dark relative flex justify-between gap-x-2 items-center transition-all ease-in-out duration-150 ring-1 ring-zinc-200 dark:ring-zinc-700 focus-within:ring-2 invalidated:bg-negative-50 invalidated:ring-negative-500 dark:invalidated:ring-negative-700 dark:invalidated:bg-negative-700/10 dark:invalidated:ring-negative-600;
+}
+
+/* Add checkmark manually */
+input[type="checkbox"].form-checkbox::after {
+    content: '';
+    @apply absolute inset-0 flex items-center justify-center opacity-0 text-white text-sm font-medium;
+}
+
+/* Show the checkmark immediately when checked */
+input[type="checkbox"].form-checkbox:checked::after {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+    @apply opacity-100 z-10;
+}
+
+/* Keep color consistent with WireUI themes (primary) */
+input[type="checkbox"].form-checkbox:checked {
+    @apply bg-primary-600 border-primary-600;
+}
+
+/* Optional dark mode support */
+.dark input[type="checkbox"].form-checkbox {
+    @apply bg-gray-800 border-gray-600;
+}
+
+.dark input[type="checkbox"].form-checkbox:checked {
+    @apply bg-primary-500 border-primary-500;
+}
