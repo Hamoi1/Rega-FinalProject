@@ -264,7 +264,7 @@
             </div>
             {{-- Pagination --}}
             <div class="p-2 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
-                {{ $buses_lines->links('livewire::simple-tailwind', data: ['scrollTo' => '#lines']) }}
+                {{ $buses_lines->links('livewire::simple-tailwind') }}
             </div>
         </div>
 

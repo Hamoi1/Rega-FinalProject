@@ -6,7 +6,6 @@ use App\Enums\StatusEnum;
 use App\Models\BusLine;
 use App\Models\Favorite;
 use App\Models\Location;
-use App\Traits\WithNotification;
 use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
