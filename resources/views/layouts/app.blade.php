@@ -21,9 +21,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    {{-- ApexCharts --}}
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
     {{-- Theme Script --}}
     <script>
         const initTheme = () => {
