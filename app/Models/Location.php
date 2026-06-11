@@ -30,22 +30,6 @@ class Location extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BusLine, $this>
-     */
-    public function outgoingLines(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(BusLine::class, 'from_location_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BusLine, $this>
-     */
-    public function incomingLines(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(BusLine::class, 'to_location_id');
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<Favorite, $this>
      */
     public function favorites(): \Illuminate\Database\Eloquent\Relations\HasMany
