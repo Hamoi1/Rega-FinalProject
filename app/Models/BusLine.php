@@ -44,14 +44,6 @@ class BusLine extends Model implements HasMedia
         return $this->belongsTo(Location::class, 'to_location_id');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Favorite, $this>
-     */
-    public function favorites(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Favorite::class);
-    }
-
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('route_json_file')
