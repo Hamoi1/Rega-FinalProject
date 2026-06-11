@@ -45,11 +45,11 @@ class BusLine extends Model implements HasMedia
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<Favorite, $this>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Favorite, $this>
      */
-    public function favorites(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    public function favorites(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->morphMany(Favorite::class, 'favoritable');
+        return $this->hasMany(Favorite::class);
     }
 
     public function registerMediaCollections(): void
