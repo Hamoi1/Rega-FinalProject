@@ -216,4 +216,5 @@ return [
     'multilingual_access_desc' => 'Use the map in Kurdish, Arabic, or English with layouts that feel natural.',
     'stops_digitized' => 'Easy Planning',
     'geojson_ready' => 'Routes ready on the map',
+    'suggested_routes' => 'Suggested Routes',
 ];
