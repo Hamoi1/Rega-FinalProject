@@ -27,7 +27,7 @@ class BusLineForm extends Form
             'status' => ['required', 'in:' . implode(',', StatusEnum::toArray())],
             'route_json_file'
             => $this->edit && is_string($this->route_json_file) ? ['nullable', 'url']
-            : ['nullable','file','mimes:json','max:12288'],
+            : ['required','file','mimes:json','max:12288'],
         ];
     }
 
