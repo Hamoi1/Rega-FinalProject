@@ -1,25 +1,6 @@
 <div>
     @include('dashboard.bus-line.add-update-modal')
     @use('App\Enums\StatusEnum')
-    <x-wireui-modal blur="md" name="ViewModalBusLine" persistent x-on:keydown.escape="close;"
-        x-on:closing-modal.window="close;" width="3xl" align="center">
-        <x-wireui-card class="w-full z-70" loading="form.edit" :title="__('pages.bus_lines.view')">
-            <x-slot name="action">
-                <x-wireui-mini-button rounded x-on:click="close;" name="close-bus-line-modal" flat>
-                    <x-wireui-icon name="x-mark" class="w-5 h-5" />
-                </x-wireui-mini-button>
-            </x-slot>
-            <div wire:loading.remove wire:target='view' class="block w-full h-140">
-                @if ($selectedBusLine)
-                    <x-ui.map id="map-bus-view" wire:key="map-key-{{ $selectedBusLine->id }}" :geoJsonUrl="$selectedBusLine->route_json_file"
-                        :routeStartName="$selectedBusLine?->from_location_name" :routeEndName="$selectedBusLine?->to_location_name" :disableMarkAction="true" wire:ignore />
-                @endif
-            </div>
-            <div wire:loading wire:target='view' class="w-full h-140 flex items-center justify-center">
-                <x-ui.modal-loading />
-            </div>
-        </x-wireui-card>
-    </x-wireui-modal>
 
     <section class="p-1.5 space-y-3">
         <div class="flex items-center justify-between">
@@ -27,8 +8,7 @@
                 @lang('pages.bus_lines.list')
             </h1>
             <div>
-                <button name="add-bus-line" class="page-plus-class" type="button"
-                    x-on:click="$openModal('AddOrUpdate');">
+                <button name="add-bus-line" class="page-plus-class" type="button" x-on:click="$openModal('AddOrUpdate');">
                     <span class="hidden lg:inline">
                         @lang('pages.bus_lines.create')
                     </span>
@@ -73,7 +53,6 @@
                 <th>@lang('pages.bus_lines.from_location')</th>
                 <th>@lang('pages.bus_lines.to_location')</th>
                 <th>@lang('words.status')</th>
-                <th>@lang('pages.bus_lines.route_file')</th>
                 <th>@lang('words.created_at')</th>
                 <th>@lang('words.actions')</th>
             </x-slot>
@@ -93,21 +72,6 @@
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
                                     @lang('words.inactive')
                                 </span>
-                            @endif
-                        </td>
-                        <td>
-                            @if ($busLine->getFirstMediaUrl('route_json_file'))
-                                <x-wireui-button
-                                    x-on:click="$dispatch('viewBusLine', {id: {{ $busLine->id }}});$openModal('ViewModalBusLine');"
-                                    type="button" title="{{ __('pages.bus_lines.view') }}"
-                                    name="view-{{ md5($busLine->id) }}" primary class="flex items-center w-full gap-1">
-                                    <x-wireui-icon name="eye" class="size-4" />
-                                    <span>
-                                        @lang('pages.bus_lines.view')
-                                    </span>
-                                </x-wireui-button>
-                            @else
-                                <span class="text-gray-400">-</span>
                             @endif
                         </td>
                         <td>
@@ -156,7 +120,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6">
+                        <td colspan="5">
                             <x-table.empty-state />
                         </td>
                     </tr>

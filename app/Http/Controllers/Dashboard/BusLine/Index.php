@@ -7,7 +7,6 @@ use App\Livewire\Forms\BusLineForm;
 use App\Models\BusLine;
 use App\Traits\WithNotification;
 use Illuminate\Support\Facades\DB;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -36,9 +35,6 @@ class Index extends Component
 
     #[Url()]
     public $to_location;
-
-    #[Locked]
-    public $selectedBusLine;
 
     public function render(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
@@ -119,23 +115,6 @@ class Index extends Component
         $this->form->route_json_file = $busLine->route_json_file;
     }
 
-    #[On('viewBusLine')]
-    public function view($id): void
-    {
-        $locale = app()->getLocale();
-        $this->selectedBusLine = BusLine::withAggregate('fromLocation as from_location_name', DB::raw('JSON_UNQUOTE(JSON_EXTRACT(name, "$.' . $locale . '"))'))
-            ->withAggregate('toLocation as to_location_name', DB::raw('JSON_UNQUOTE(JSON_EXTRACT(name, "$.' . $locale . '"))'))
-            ->findOrFail($id);
-
-        // Dispatch event with new route data for the map component
-        $this->dispatch('load-map-data', [
-            'mapId' => 'map-bus-view',
-            'geoJsonUrl' => $this->selectedBusLine->route_json_file,
-            'routeStartName' => $this->selectedBusLine->from_location_name,
-            'routeEndName' => $this->selectedBusLine->to_location_name,
-        ]);
-    }
-
     public function delete($id): void
     {
         BusLine::findOrFail($id)->delete();
@@ -156,6 +135,5 @@ class Index extends Component
         $this->form->reset();
         $this->resetValidation();
         $this->resetErrorBag();
-        $this->reset('selectedBusLine');
     }
 }
