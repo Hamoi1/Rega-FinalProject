@@ -6,11 +6,11 @@ const ICONS = {
 };
 const DEFAULT_CENTER = { lat: 35.565, lng: 45.433 };
 const MAP_STYLES = {
-    standard: { id: 'standard', name: 'Standard', url: (isDark) => `https://{s}.basemaps.cartocdn.com/${isDark ? 'dark' : 'light'}_all/{z}/{x}/{y}{r}.png`, maxZoom: 19 },
-    streets: { id: 'streets', name: 'Streets', url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19 },
-    vivid: { id: 'vivid', name: 'Vivid', url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', maxZoom: 19 },
-    satellite: { id: 'satellite', name: 'Satellite', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 19 },
-    terrain: { id: 'terrain', name: 'Terrain', url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', maxZoom: 17 }
+    standard: { id: 'standard', name: 'Standard', url: (isDark) => `https://{s}.basemaps.cartocdn.com/${isDark ? 'dark' : 'light'}_all/{z}/{x}/{y}{r}.png`, maxZoom: 20 },
+    streets: { id: 'streets', name: 'Streets', url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 20 },
+    vivid: { id: 'vivid', name: 'Vivid', url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', maxZoom: 20 },
+    satellite: { id: 'satellite', name: 'Satellite', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 20 },
+    terrain: { id: 'terrain', name: 'Terrain', url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', maxZoom: 20 }
 };
 const MAP_STYLE_STORAGE_KEY = 'Rega.mapStyle';
 
@@ -79,7 +79,13 @@ function MapComponent(options) {
             const center = this.centerPoint?.lat ? [this.centerPoint.lng, this.centerPoint.lat] : [DEFAULT_CENTER.lng, DEFAULT_CENTER.lat];
 
             this.map = new window.maplibregl.Map({
-                container: this.id, style: this.buildRasterStyle(), center, zoom: this.zoomLevel ?? 16, attributionControl: true
+                container: this.id,
+                style: this.buildRasterStyle(),
+                center,
+                zoom: this.zoomLevel ?? 16,
+                minZoom: 3,
+                maxZoom: 19,
+                attributionControl: true
             });
 
             this.map.addControl(new window.maplibregl.NavigationControl({ visualizePitch: false }), 'bottom-left');
@@ -96,7 +102,10 @@ function MapComponent(options) {
             this.setupEvents();
 
             this.map.on('load', async () => {
-                this.map.on('zoomend', () => this.updateMarkerIcons());
+                this.map.on('zoom', () => {
+                    clearTimeout(this._zoomDebounce);
+                    this._zoomDebounce = setTimeout(() => this.updateMarkerIcons(), 80);
+                });
                 if (!this.disableMarkAction) this.map.on('click', e => this.handleMapClick(e.lngLat));
 
                 await this.loadInitialMarks();
@@ -112,7 +121,7 @@ function MapComponent(options) {
             const url = typeof def.url === 'function' ? def.url(isDarkTheme()) : def.url;
             return {
                 version: 8, sources: { 'raster-tiles': { type: 'raster', tiles: ['a', 'b', 'c'].map(s => url.replace('{s}', s)), tileSize: 256 } },
-                layers: [{ id: 'raster-tiles', type: 'raster', source: 'raster-tiles', minzoom: 0, maxzoom: def.maxZoom ?? 20 }]
+                layers: [{ id: 'raster-tiles', type: 'raster', source: 'raster-tiles', minzoom: 2, maxzoom: def.maxZoom ?? 20 }]
             };
         },
 
@@ -235,7 +244,7 @@ function MapComponent(options) {
             else if (this.marks.length > 1) {
                 const bounds = new window.maplibregl.LngLatBounds();
                 this.marks.forEach(m => bounds.extend([m.lng, m.lat]));
-                this.map.fitBounds(bounds, { padding: 80, maxZoom: 15 });
+                this.map.fitBounds(bounds, { padding: 80, maxZoom: 15, minZoom: 5 });
             }
         },
 
@@ -264,7 +273,7 @@ function MapComponent(options) {
             if (options.fitBounds && coords.length) {
                 const bounds = new window.maplibregl.LngLatBounds();
                 coords.forEach(c => bounds.extend([c[0], c[1]]));
-                this.map.fitBounds(bounds, { padding: 100, maxZoom: 16 });
+                this.map.fitBounds(bounds, { padding: 100, maxZoom: 16, minZoom: 5 });
             }
         },
 
@@ -332,12 +341,29 @@ function MapComponent(options) {
 
         getMarkerScale() {
             const z = this.map?.getZoom() ?? 16;
-            return 0.75 + (1.35 - 0.75) * Math.min(1, Math.max(0, (z - 0) / 20));
+            return 0.6 + (1.4 - 0.6) * Math.min(1, Math.max(0, (z - 8) / 14));
         },
 
         updateMarkerIcons() {
-            this.createIconsWithScale(this.getMarkerScale());
-            this.marks.forEach(m => { if (m.marker) m.marker.getElement().innerHTML = buildMarkerElement(m.info?.type === 'bus' ? ICONS.bus : ICONS.busStop, m.id === this.selectedMarkId).innerHTML; });
+            const scale = this.getMarkerScale();
+            const newSize = Math.round(48 * scale);
+
+            // Skip if size hasn't changed
+            if (this._lastMarkerSize === newSize) return;
+            this._lastMarkerSize = newSize;
+
+            this.createIconsWithScale(scale);
+            this.marks.forEach(m => {
+                if (!m.marker) return;
+                const el = m.marker.getElement();
+                el.style.width = `${newSize}px`;
+                el.style.height = `${newSize}px`;
+                el.innerHTML = buildMarkerElement(
+                    m.info?.type === 'bus' ? ICONS.bus : ICONS.busStop,
+                    m.id === this.selectedMarkId,
+                    newSize
+                ).innerHTML;
+            });
         },
 
         createIconsWithScale(s) { this.icons = { busSize: Math.round(48 * s), userSize: Math.round(24 * s) }; },
@@ -351,6 +377,7 @@ function MapComponent(options) {
         destroy() {
             if (this._destroyed) return;
             this._destroyed = true;
+            clearTimeout(this._zoomDebounce);
             this._events?.forEach(([evt, fn]) => window.removeEventListener(evt, fn));
             document.removeEventListener('livewire:navigate', this._navFn);
             this._themeObserver?.disconnect(); this.resizeObserver?.disconnect();
