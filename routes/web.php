@@ -21,7 +21,7 @@ Route::middleware([SetUpLanguageMiddleware::class, GzipEncodeResponse::class, 't
     })->name('change-language');
     Route::get('/', App\Http\Controllers\Home\Index::class)->name('home');
     Route::get('/map', App\Http\Controllers\Home\Map::class)->name('map');
-    Route::get('/stops/{location}', App\Http\Controllers\Home\Stop::class)->name('words.show');
+    Route::get('/location/details/{location}', App\Http\Controllers\Home\LocationDetails::class)->name('words.show');
     Route::get('/about', App\Http\Controllers\Home\About::class)->name('about');
     Route::get('/contact', App\Http\Controllers\Home\Contact::class)->name('contact');
     Route::get('/privacy-policy', App\Http\Controllers\Home\Privacy::class)->name('privacy');

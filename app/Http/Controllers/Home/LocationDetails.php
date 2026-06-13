@@ -8,10 +8,9 @@ use App\Models\Favorite;
 use App\Models\Location;
 use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
 use Illuminate\Support\Facades\DB;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-class Stop extends Component
+class LocationDetails extends Component
 {
     use SEOToolsTrait;
 
@@ -45,10 +44,9 @@ class Stop extends Component
                 ->exists();
     }
 
-    #[Layout('layouts.app')]
     public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
     {
-        return view('home.stop');
+        return view('home.location_details');
     }
 
     public function toggleFavorite(): void
