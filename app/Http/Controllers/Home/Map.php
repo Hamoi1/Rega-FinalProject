@@ -68,7 +68,7 @@ class Map extends Component
                     ->where('m.model_type', BusLine::class)
                     ->where('m.collection_name', 'route_json_file'))
                 ->where('bl.status', StatusEnum::Active->value)
-                ->when($this->city_id, fn($q) => $q->where('lf.city_id', $this->city_id))
+                ->where('lf.city_id', $this->city_id)
                 ->when($this->route_from_id, fn($q) => $q->where('bl.from_location_id', $this->route_from_id))
                 ->when($this->route_to_id, fn($q) => $q->where('bl.to_location_id', $this->route_to_id))
                 ->when($this->search, fn($q) => $q->where(
