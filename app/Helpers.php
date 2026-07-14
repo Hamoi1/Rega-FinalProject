@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Foundation\Vite;
 use Spatie\Valuestore\Valuestore;
 
